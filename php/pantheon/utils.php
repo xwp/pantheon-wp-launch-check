@@ -7,6 +7,7 @@ use \Pantheon\Utils as Pantheon;
 
 class Utils {
 	static $fs;
+	static $pantheon_settings;
 
   /**
   * Searches php files for the provided regex
@@ -46,5 +47,22 @@ class Utils {
     return self::$fs;
   }
 
+	public static function set($key,$value) {
+		if (null === self::$pantheon_settings) {
+			self::$pantheon_settings = new \stdClass;
+		}
+		self::$pantheon_settings->$key = $value;
+		return self::$pantheon_settings;
+	}
+
+	public static function get($key=null) {
+		if (null === self::$pantheon_settings) {
+			return false;
+		}
+		if (property_exists(self::$pantheon_settings,$key)) {
+			return self::$pantheon_settings->$key;
+		}
+		return false;
+	}
 
 }

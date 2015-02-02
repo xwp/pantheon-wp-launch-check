@@ -34,12 +34,16 @@ class Insecure extends Checkimplementation {
 
   public function message(Messenger $messenger) {
     if (!empty($this->alerts)) {
-      $details = sprintf( "Found %s files that reference risky function. \n\t-> %s",
-        count($this->alerts),
-        join("\n\t-> ", $this->alerts)
-      );
+      if ('json' != Utils::get('format')) {
+        $details = sprintf( "Found %s files that reference risky function. \n\t-> %s",
+          count($this->alerts),
+          join("\n\t-> ", $this->alerts)
+        );
+        $this->result .= $details;
+      } else {
+        $this->result = $this->alerts;
+      }
       $this->score = 0;
-      $this->result .= $details;
       $this->action = "You do not need to deactivate these files, but please scrutinize them in the event of a security issue.";
     }
     $messenger->addMessage(get_object_vars($this));

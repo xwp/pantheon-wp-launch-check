@@ -93,16 +93,9 @@ class Plugins extends Checkimplementation {
 
   public function message(Messenger $messenger) {
       if (!empty($this->alerts)) {
-        $table = new \cli\Table();
-        $table->setHeaders(array(
-          'slug'=>"Plugin",
-          'installed'=>"Current",
-          'available' => "Available",
-          'needs_update'=>"Needs Update",
-          'vulnerable'=>"Vulnerabilities"
-        ));
         $count_update = 0;
         $count_vuln = 0;
+
         foreach( $this->alerts as $alert ) {
           if ($alert['needs_update']) {
             $count_update++;
@@ -110,12 +103,14 @@ class Plugins extends Checkimplementation {
           if ('none' !== $alert['vulnerable']) {
             $count_vuln++;
           }
-          $table->addRow($alert);
         }
-        $rendered = PHP_EOL;
-        $rendered .= sprintf("Found %d plugins needing updates and %d known vulnerabilities ... \n".PHP_EOL, $count_update, $count_vuln);
-        $rendered .= join("\n", $table->getDisplayLines() );
-        $this->result .= $rendered;
+
+        if ('json' != Utils::get('format')) {
+          $this->result .= $this->render_raw();
+        } else {
+          $this->result = $this->alerts;
+        }
+
         if ($count_update > 0) {
           $this->score = 0;
           $this->action = "You should update all out-of-date plugins";
@@ -127,5 +122,24 @@ class Plugins extends Checkimplementation {
         }
     }
     $messenger->addMessage(get_object_vars($this));
+  }
+
+  public function render_raw() {
+    $table = new \cli\Table();
+    $table->setHeaders(array(
+      'slug'=>"Plugin",
+      'installed'=>"Current",
+      'available' => "Available",
+      'needs_update'=>"Needs Update",
+      'vulnerable'=>"Vulnerabilities"
+    ));
+
+    foreach( $this->alerts as $alert ) {
+      $table->addRow($alert);
+    }
+    $rendered = PHP_EOL;
+    $rendered .= sprintf("Found %d plugins needing updates and %d known vulnerabilities ... \n".PHP_EOL, $count_update, $count_vuln);
+    $rendered .= join("\n", $table->getDisplayLines() );
+    return $rendered;
   }
 }

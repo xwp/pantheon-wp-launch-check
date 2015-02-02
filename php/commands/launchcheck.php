@@ -3,6 +3,8 @@
 * Implements example command.
 * @version alpha-0.1
 */
+use \Pantheon\Utils;
+
 class LaunchCheck extends WP_CLI_Command {
   public $fs;
   public $skipfiles = array();
@@ -15,6 +17,8 @@ class LaunchCheck extends WP_CLI_Command {
   *
   */
   public function all($args, $assoc_args) {
+    $format = isset($assoc_args['format']) ? $assoc_args['format'] : 'raw';
+    Utils::set('format',$format);
     $searcher = new \Pantheon\Filesearcher(getcwd().'/wp-content');
     $searcher->register( new \Pantheon\Checks\Sessions() );
     $searcher->register( new \Pantheon\Checks\Insecure() );
@@ -43,6 +47,8 @@ class LaunchCheck extends WP_CLI_Command {
   * @alias object-cache
   */
   public function object_cache($args, $assoc_args) {
+    $format = isset($assoc_args['format']) ? $assoc_args['format'] : 'raw';
+    Utils::set('format',$format);
     $checker = new \Pantheon\Checker();
     $checker->register( new \Pantheon\Checks\Objectcache() );
     $checker->execute();
@@ -67,6 +73,8 @@ class LaunchCheck extends WP_CLI_Command {
   *
   */
   public function secure($args, $assoc_args) {
+    $format = isset($assoc_args['format']) ? $assoc_args['format'] : 'raw';
+    Utils::set('format',$format);
     $searcher = new \Pantheon\Filesearcher(getcwd().'/wp-content');
     $searcher->register( new \Pantheon\Checks\Insecure() );
     $searcher->register( new \Pantheon\Checks\Exploited() );
@@ -93,6 +101,8 @@ class LaunchCheck extends WP_CLI_Command {
   *
   */
   public function plugins($args, $assoc_args) {
+    $format = isset($assoc_args['format']) ? $assoc_args['format'] : 'raw';
+    Utils::set('format',$format);
     $checker = new \Pantheon\Checker();
     $checker->register( new \Pantheon\Checks\Plugins( isset($assoc_args['all'])) );
     $checker->execute();
@@ -113,11 +123,12 @@ class LaunchCheck extends WP_CLI_Command {
   *   wp launchcheck sessions
   *
   */
-  public function sessions( $args, $assoc_args ) {
-    $searcher = new \Pantheon\Filesearcher(getcwd().'/wp-content');
-    $searcher->register( new \Pantheon\Checks\Insecure() );
-    $searcher->execute();
+  public function sessions($args, $assoc_args) {
     $format = isset($assoc_args['format']) ? $assoc_args['format'] : 'raw';
+    Utils::set('format',$format);
+    $searcher = new \Pantheon\Filesearcher(getcwd().'/wp-content');
+    $searcher->register( new \Pantheon\Checks\Sessions() );
+    $searcher->execute();
     \Pantheon\Messenger::emit($format);
   }
 }

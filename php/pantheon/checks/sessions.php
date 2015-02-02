@@ -34,14 +34,21 @@ class Sessions extends Checkimplementation {
     return $this;
   }
 
+  /**
+   * This function munges data for printing
+   */
   public function message(Messenger $messenger) {
     if (!empty($this->alerts)) {
-        $details = sprintf( "Found %s files that reference sessions \n\t-> %s",
-        count($this->alerts),
-        join("\n\t-> ", $this->alerts )
-      );
+      if ('json' != Utils::get('format')) {
+          $details = sprintf( "Found %s files that reference sessions \n\t-> %s",
+          count($this->alerts),
+          join("\n\t-> ", $this->alerts )
+        );
+        $this->result .= $details;
+      } else {
+        $this->result = $this->alerts;
+      }
       $this->score = -1;
-      $this->result .= $details;
     } else {
       if ( $this->has_plugin ) {
         $details = 'You are running wp-native-php-sessions plugin. No scan needed';

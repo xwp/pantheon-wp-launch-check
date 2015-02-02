@@ -57,8 +57,12 @@ class Objectcache extends Checkimplementation {
         }
 
         $avg = $total/count($this->alerts);
-        $this->result = "\n";
-        $this->result .= join("\n", $table->getDisplayLines() );
+        if ('json' != Utils::get('json')) {
+          $this->result = "\n";
+          $this->result .= join("\n", $table->getDisplayLines() );
+        } else {
+          $this->result = $this->alerts;
+        }
 
         $this->score = $avg;
         $this->action = "You should use object caching";
