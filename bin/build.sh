@@ -51,5 +51,6 @@ urlencoding_mode = normal
 use_https = False
 verbosity = WARNING' > ~/.s3cfg
 
-s3cmd put --acl-public wp-cli.phar s3://pantheon-wp-cli/release-test.phar
+version=$( php -r "\$info=parse_ini_file('launchcheck.info'); echo \$info['version'];" )
+s3cmd put --acl-public wp-cli.phar s3://wp-cli/compiled-release-$version.phar
 
