@@ -1,12 +1,13 @@
 <?php
 /**
- * Implements example command.
+ * Pantheon's WP Launch Check.
+ *
  * @version 0.1.4
  */
 class LaunchCheck extends WP_CLI_Command {
 
 	/**
-	 * run all checks
+	 * Run all checks
 	 *
 	 * ## OPTIONS
 	 *
@@ -94,7 +95,7 @@ class LaunchCheck extends WP_CLI_Command {
 	}
 
 	/**
-	 * checks for object caching
+	 * Checks for object caching.
 	 *
 	 * ## OPTIONS
 	 *
@@ -119,7 +120,7 @@ class LaunchCheck extends WP_CLI_Command {
 	}
 
 	/**
-	 * checks files for insecure code and checks the wpvulndb.com/api for known vulnerabilities
+	 * Checks files for insecure code and checks the wpvulndb.com/api for known vulnerabilities.
 	 *
 	 * ## OPTIONS
 	 *
@@ -147,8 +148,7 @@ class LaunchCheck extends WP_CLI_Command {
 	}
 
 	/**
-	 * checks plugins for vulnerbities using the wpscan vulnerability DB
-	 * - https://wpvulndb.com/api
+	 * Checks plugins for vulnerabilities using the wpscan vulnerability DB <https://wpvulndb.com/api>.
 	 *
 	 * ## OPTIONS
 	 *
@@ -175,7 +175,7 @@ class LaunchCheck extends WP_CLI_Command {
 	}
 
 	/**
-	 * checks the files for session_start()
+	 * Checks the files for session_start().
 	 *
 	 * ## OPTIONS
 	 *
