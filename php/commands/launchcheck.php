@@ -198,18 +198,3 @@ class LaunchCheck extends WP_CLI_Command {
 		\Pantheon\Messenger::emit( $format );
 	}
 }
-
-// register our autoloader
-spl_autoload_register( function ( $class ) {
-	if ( class_exists( $class ) ) { return $class; }
-	$class = strtolower( $class );
-	if ( strstr( $class, 'pantheon' ) ) {
-		$class = str_replace( '\\', '/', $class );
-		$path = WP_CLI_ROOT . '/php/' . $class . '.php';
-		if ( file_exists( $path ) ) {
-			require_once( $path );
-		}
-	}
-} );
-
-WP_CLI::add_command( 'launchcheck', 'LaunchCheck' );
