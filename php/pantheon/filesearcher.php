@@ -26,6 +26,9 @@ class Filesearcher extends Checker {
 
     $files = $this->finder->files()->in($this->dir)->name("*.php");
     foreach ( $files as $file ) {
+      if ( preg_match( '/wp[-_]launch[-_]check/', $file ) ) {
+        continue;
+      }
       if (\WP_CLI::get_config('debug')) {
         \WP_CLI::line( sprintf("-> %s",$file->getRelativePathname()) );
       }
